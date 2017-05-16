@@ -29,7 +29,7 @@ public class XMLParser {
             throw new Exception("OMGS LOL WTF IS THIS EXCEPTION TROLOLOL");
         }
 
-        NodeList reviewerList = document.getFirstChild().getChildNodes();
+        NodeList reviewerList = document.getDocumentElement().getChildNodes();
 
         SortedMap<String, Review> sortedReviewMapByReviewer = new TreeMap<>();
         SortedMap<String, Review> sortedReviewMapByBook = new TreeMap<>();
@@ -44,8 +44,8 @@ public class XMLParser {
                     if (reviewNode.getNodeType() == Node.ELEMENT_NODE) {
                         String bookId = reviewNode.getChildNodes().item(1).getTextContent();
                         String bookScore = reviewNode.getChildNodes().item(3).getTextContent();
-                        sortedReviewMapByReviewer.put(reviewerId + bookId, new Review(reviewerId, bookId, bookScore));
-                        sortedReviewMapByBook.put(bookId + reviewerId, new Review(reviewerId, bookId, bookScore));
+                        sortedReviewMapByReviewer.put(reviewerId + "," +  bookId, new Review(reviewerId, bookId, bookScore));
+                        sortedReviewMapByBook.put(bookId + "," + reviewerId, new Review(reviewerId, bookId, bookScore));
                     }
                 }
             }
