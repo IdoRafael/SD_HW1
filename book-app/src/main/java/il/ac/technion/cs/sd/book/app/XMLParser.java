@@ -8,6 +8,7 @@ import org.xml.sax.InputSource;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.StringReader;
+import java.util.Comparator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -31,8 +32,12 @@ public class XMLParser {
 
         NodeList reviewerList = document.getDocumentElement().getChildNodes();
 
-        SortedMap<String, Review> sortedReviewMapByReviewer = new TreeMap<>();
-        SortedMap<String, Review> sortedReviewMapByBook = new TreeMap<>();
+        Comparator<String> csvStringComparator = Comparator
+                .comparing((String s) -> s.split(",")[0])
+                .thenComparing((String s)-> s.split(",")[1]);
+
+        SortedMap<String, Review> sortedReviewMapByReviewer = new TreeMap<>(csvStringComparator);
+        SortedMap<String, Review> sortedReviewMapByBook = new TreeMap<>(csvStringComparator);
 
         for (int i = 0; i < reviewerList.getLength(); ++i) {
             Node reviewerNode = reviewerList.item(i);
@@ -44,8 +49,17 @@ public class XMLParser {
                     if (reviewNode.getNodeType() == Node.ELEMENT_NODE) {
                         String bookId = reviewNode.getChildNodes().item(1).getTextContent();
                         String bookScore = reviewNode.getChildNodes().item(3).getTextContent();
-                        sortedReviewMapByReviewer.put(reviewerId + "," +  bookId, new Review(reviewerId, bookId, bookScore));
-                        sortedReviewMapByBook.put(bookId + "," + reviewerId, new Review(reviewerId, bookId, bookScore));
+
+                        Review newReview = new Review(reviewerId, bookId, bookScore);
+
+                        sortedReviewMapByReviewer.put(
+                                String.join(",", reviewerId, bookId),
+                                newReview
+                        );
+                        sortedReviewMapByBook.put(
+                                String.join(",", bookId, reviewerId),
+                                newReview
+                        );
                     }
                 }
             }

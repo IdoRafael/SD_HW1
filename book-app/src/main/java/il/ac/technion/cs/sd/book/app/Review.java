@@ -13,7 +13,15 @@ public class Review {
 
     @Override
     public String toString() {
-        return "[Reviewer: " + reviewerId + "; Book: " + bookId + "; Score: " + bookScore + "]";
+        return toStringFromReviewerFirst();
+    }
+
+    public String toStringFromReviewerFirst() {
+        return String.join(",", reviewerId, bookId, bookScore);
+    }
+
+    public String toStringFromBookFirst() {
+        return String.join(",", bookId, reviewerId, bookScore);
     }
 }
 
