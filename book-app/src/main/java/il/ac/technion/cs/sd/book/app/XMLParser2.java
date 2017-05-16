@@ -36,10 +36,9 @@ public class XMLParser2 {
 
             XPathFactory xpathFactory = XPathFactory.newInstance();
             XPath xpath = xpathFactory.newXPath();
-            XPathExpression expr = xpath.compile("/Reviewer/Review");
+            XPathExpression expr = xpath.compile("/Root/Reviewer/Review");
 
             NodeList reviewList = (NodeList) expr.evaluate(document, XPathConstants.NODESET);
-
 
             for (int i = 0; i < reviewList.getLength(); ++i) {
                 Node reviewNode = reviewList.item(i);

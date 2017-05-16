@@ -22,6 +22,16 @@ public class XMLParserTest {
 
   @Test
   public void testSimple() throws Exception {
+    System.out.println("DOMParser says:");
+    String xml = getXMLStringFromFile("xmlParserTest.xml");
+    SortedMap[] sortedMaps = XMLParser.parseXMLToSortedMap(xml);
+    System.out.println(sortedMaps[0]);
+    System.out.println(sortedMaps[1]);
+  }
+
+  @Test
+  public void testSimple2() throws Exception {
+    System.out.println("XPATH says:");
     String xml = getXMLStringFromFile("xmlParserTest.xml");
     SortedMap[] sortedMaps = XMLParser2.parseXMLToSortedMap(xml);
     System.out.println(sortedMaps[0]);
