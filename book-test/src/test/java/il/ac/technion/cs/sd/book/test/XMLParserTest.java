@@ -1,6 +1,5 @@
 package il.ac.technion.cs.sd.book.test;
 
-import il.ac.technion.cs.sd.book.app.BookScoreReader;
 import il.ac.technion.cs.sd.book.app.XMLParser;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.SortedMap;
 
-import static org.junit.Assert.assertEquals;
 
 public class XMLParserTest {
 
