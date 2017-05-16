@@ -18,14 +18,14 @@ import java.util.TreeMap;
 
 public class XMLParser2 {
 
-    public static SortedMap<String,Review>[] parseXMLToSortedMap(String xml) throws Exception {
+    public static SortedMap<String,String>[] parseXMLToSortedMap(String xml) throws Exception {
 
         Comparator<String> csvStringComparator = Comparator
                 .comparing((String s) -> s.split(",")[0])
                 .thenComparing((String s)-> s.split(",")[1]);
 
-        SortedMap<String, Review> sortedReviewMapByReviewer = new TreeMap<>(csvStringComparator);
-        SortedMap<String, Review> sortedReviewMapByBook = new TreeMap<>(csvStringComparator);
+        SortedMap<String, String> sortedReviewMapByReviewer = new TreeMap<>(csvStringComparator);
+        SortedMap<String, String> sortedReviewMapByBook = new TreeMap<>(csvStringComparator);
 
 
         try {
@@ -50,11 +50,11 @@ public class XMLParser2 {
 
                     sortedReviewMapByReviewer.put(
                             String.join(",", reviewerId, bookId),
-                            newReview
+                            newReview.toStringFromReviewerFirst()
                     );
                     sortedReviewMapByBook.put(
                             String.join(",", bookId, reviewerId),
-                            newReview
+                            newReview.toStringFromBookFirst()
                     );
                 }
         }

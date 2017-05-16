@@ -10,9 +10,8 @@ import org.junit.Test;
 
 public class StringStorageTest {
 
-
   @Test
-  public void testSimple2() throws Exception {
+  public void testNameLolsChange$$$() throws Exception {
     Injector injector = Guice.createInjector(new AbstractModule() {
       @Override
       protected void configure() {

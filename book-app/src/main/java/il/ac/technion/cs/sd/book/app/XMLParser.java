@@ -36,8 +36,8 @@ public class XMLParser {
                 .comparing((String s) -> s.split(",")[0])
                 .thenComparing((String s)-> s.split(",")[1]);
 
-        SortedMap<String, Review> sortedReviewMapByReviewer = new TreeMap<>(csvStringComparator);
-        SortedMap<String, Review> sortedReviewMapByBook = new TreeMap<>(csvStringComparator);
+        SortedMap<String, String> sortedReviewMapByReviewer = new TreeMap<>(csvStringComparator);
+        SortedMap<String, String> sortedReviewMapByBook = new TreeMap<>(csvStringComparator);
 
         for (int i = 0; i < reviewerList.getLength(); ++i) {
             Node reviewerNode = reviewerList.item(i);
@@ -54,11 +54,11 @@ public class XMLParser {
 
                         sortedReviewMapByReviewer.put(
                                 String.join(",", reviewerId, bookId),
-                                newReview
+                                newReview.toStringFromReviewerFirst()
                         );
                         sortedReviewMapByBook.put(
                                 String.join(",", bookId, reviewerId),
-                                newReview
+                                newReview.toStringFromBookFirst()
                         );
                     }
                 }
