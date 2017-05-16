@@ -1,8 +1,8 @@
 package il.ac.technion.cs.sd.book.library;
 
 
-public interface Storage {
-    String get(int index);
+import java.util.Optional;
 
-    int size();
+public interface Storage {
+    Optional<String> getStringByIds(String id0, String id1);
 }
