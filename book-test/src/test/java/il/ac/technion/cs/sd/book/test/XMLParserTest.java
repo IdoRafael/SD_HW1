@@ -1,6 +1,7 @@
 package il.ac.technion.cs.sd.book.test;
 
 import il.ac.technion.cs.sd.book.app.XMLParser;
+import il.ac.technion.cs.sd.book.app.XMLParser2;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
@@ -22,7 +23,7 @@ public class XMLParserTest {
   @Test
   public void testSimple() throws Exception {
     String xml = getXMLStringFromFile("xmlParserTest.xml");
-    SortedMap[] sortedMaps = XMLParser.parseXMLToSortedMap(xml);
+    SortedMap[] sortedMaps = XMLParser2.parseXMLToSortedMap(xml);
     System.out.println(sortedMaps[0]);
     System.out.println(sortedMaps[1]);
   }
