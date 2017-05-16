@@ -1,16 +1,18 @@
 package il.ac.technion.cs.sd.book.library;
 
 import il.ac.technion.cs.sd.book.ext.LineStorage;
+import il.ac.technion.cs.sd.book.ext.LineStorageFactory;
 
 import javax.inject.Inject;
 import java.util.*;
+
 
 public class StringStorage extends AbstractList<String> implements RandomAccess, Storage {
     private LineStorage lineStorage;
 
     @Inject
-    public StringStorage(LineStorage lineStorage) {
-        this.lineStorage = lineStorage;
+    public StringStorage(String fileName, LineStorageFactory lineStorageFactory) {
+        this.lineStorage = lineStorageFactory.open(fileName);
     }
 
     @Override
@@ -25,6 +27,7 @@ public class StringStorage extends AbstractList<String> implements RandomAccess,
     @Override
     public int size() {
         try {
+            System.out.println("trololololollolo WTWFWTWFWTWT");
             return lineStorage.numberOfLines();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -32,7 +35,7 @@ public class StringStorage extends AbstractList<String> implements RandomAccess,
     }
 
     public Optional<String> getStringByIds(String id0, String id1) {
-        int keyFound = findIndexByTwoKeys(String.join(",", id0, id1));
+        int keyFound = findIndexByTwoKeys(id0, id1);
         if (keyFound >= 0) {
             return Optional.of(get(keyFound));
         } else {
@@ -40,13 +43,42 @@ public class StringStorage extends AbstractList<String> implements RandomAccess,
         }
     }
 
-    private int findIndexByTwoKeys(String keys) {
+    public List<String> getAllStringsById(String id) {
+        int keyFound = findIndexBySingleKey(id);
+        LinkedList<String> sortedBySecondaryId = new LinkedList<>();
+        if (keyFound >= 0) {
+            for (int i = keyFound ; i >=0 ; --i) {
+                String toAdd = get(i);
+                if (toAdd.split(",")[0].equals(id)) {
+                    sortedBySecondaryId.addFirst(toAdd);
+                } else {
+                    break;
+                }
+            }
+            for (int i = keyFound + 1 ; i < size() ; ++i) {
+                String toAdd = get(i);
+                if (toAdd.split(",")[0].equals(id)) {
+                    sortedBySecondaryId.addLast(toAdd);
+                } else {
+                    break;
+                }
+            }
+            return sortedBySecondaryId;
+        } else {
+            return sortedBySecondaryId;
+        }
+    }
+
+    private int findIndexByTwoKeys(String key0, String key1) {
         int keyFound;
 
         try {
-            keyFound = Collections.binarySearch(this, keys,
+            keyFound = Collections.binarySearch(
+                    this,
+                    String.join(",", key0, key1),
                     Comparator.comparing((String s) -> s.split(",")[0])
-                            .thenComparing((String s)-> s.split(",")[1]));
+                            .thenComparing((String s)-> s.split(",")[1])
+            );
         } catch (RuntimeException e) {
             throw e;
         }
