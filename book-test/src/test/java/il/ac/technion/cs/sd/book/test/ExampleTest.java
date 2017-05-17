@@ -5,9 +5,7 @@ import com.google.inject.Injector;
 import il.ac.technion.cs.sd.book.app.BookScoreInitializer;
 import il.ac.technion.cs.sd.book.app.BookScoreReader;
 import il.ac.technion.cs.sd.book.ext.LineStorageModule;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.Timeout;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,9 +15,7 @@ import java.util.Scanner;
 
 import static org.junit.Assert.assertEquals;
 
-public class ExampleTest {
-
-  @Rule public Timeout globalTimeout = Timeout.seconds(30);
+public class ExampleTest  extends SdHw1Test {
 
   private static BookScoreReader setupAndGetReader(String fileName) throws FileNotFoundException {
     String fileContents =

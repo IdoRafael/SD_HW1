@@ -13,12 +13,8 @@ public class StringStorage extends AbstractList<String> implements RandomAccess,
     private int size = 0;
 
     @Inject
-    public StringStorage(String fileName, LineStorageFactory lineStorageFactory) {
+    public StringStorage(String fileName, SortedMap<String,String> sortedMap,LineStorageFactory lineStorageFactory) {
         this.lineStorage = lineStorageFactory.open(fileName);
-    }
-
-    @Override
-    public void appendLines(SortedMap<String,String> sortedMap) {
         sortedMap.forEach((k, v) -> lineStorage.appendLine(v));
         sizeIsValid = false;
     }

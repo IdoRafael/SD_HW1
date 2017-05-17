@@ -12,9 +12,7 @@ import java.util.Scanner;
 import java.util.SortedMap;
 
 
-public class XMLParserTest {
-
-  @Rule public Timeout globalTimeout = Timeout.seconds(30);
+public class XMLParserTest extends SdHw1Test{
 
   private static String getXMLStringFromFile(String fileName) throws FileNotFoundException {
     return new Scanner(new File(XMLParserTest.class.getResource(fileName).getFile())).useDelimiter("\\Z").next();

@@ -3,6 +3,7 @@ package il.ac.technion.cs.sd.book.test;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Provides;
 import il.ac.technion.cs.sd.book.ext.LineStorage;
 import il.ac.technion.cs.sd.book.ext.LineStorageFactory;
 import il.ac.technion.cs.sd.book.library.StringStorage;
@@ -18,7 +19,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
-public class StringStorageTest {
+public class StringStorageTest extends SdHw1Test {
 
     static final int LINE_STORAGE_SIZE = 100;
 
@@ -35,12 +36,26 @@ public class StringStorageTest {
             return String.join(",", "" + i/10, "" + i%10, "" + i%10);
         }).when(lineStorage).read(Mockito.anyInt());
 
+        SortedMap<String, String> sortedMap = new TreeMap<>();
+        IntStream.range(0, LINE_STORAGE_SIZE)
+                .forEach(i -> sortedMap.put("" + i, ""));
+
         LineStorageFactory lineStorageFactory = s -> lineStorage;
 
         Injector injector = Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
                 bind(LineStorageFactory.class).toInstance(lineStorageFactory);
+            }
+
+            @Provides
+            String provideFileName() {
+                return "asdf";
+            }
+
+            @Provides
+            SortedMap<String,String> provideSortedMap() {
+                return sortedMap;
             }
         });
         return injector.getInstance(StringStorage.class);
@@ -107,12 +122,6 @@ public class StringStorageTest {
     public void shouldAppendRightAmountOfLines() throws InterruptedException {
         LineStorage lineStorage = Mockito.mock(LineStorage.class);
         StringStorage stringStorage = setupStringStorage(lineStorage);
-
-        SortedMap<String, String> sortedMap = new TreeMap<>();
-        IntStream.range(0, LINE_STORAGE_SIZE)
-                .forEach(i -> sortedMap.put("" + i, ""));
-
-        stringStorage.appendLines(sortedMap);
 
         Mockito.verify(lineStorage, Mockito.times(LINE_STORAGE_SIZE)).appendLine(Mockito.anyString());
     }
