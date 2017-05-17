@@ -17,7 +17,7 @@ public class StringStorage extends AbstractList<String> implements RandomAccess,
         this.lineStorage = lineStorageFactory.open(fileName);
     }
 
-    public void setup(SortedMap<String,String> sortedMap) {
+    public void appendLines(SortedMap<String,String> sortedMap) {
         sortedMap.forEach((k, v) -> lineStorage.appendLine(v));
         sizeIsValid = false;
     }
