@@ -1,9 +1,5 @@
 package il.ac.technion.cs.sd.book.test;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Provides;
 import il.ac.technion.cs.sd.book.ext.LineStorage;
 import il.ac.technion.cs.sd.book.ext.LineStorageFactory;
 import il.ac.technion.cs.sd.book.library.StringStorage;
@@ -20,15 +16,13 @@ import static org.junit.Assert.assertTrue;
 
 
 public class StringStorageTest extends SdHw1Test {
-
     static final int LINE_STORAGE_SIZE = 100;
 
     //log2(size)+1 iterations + 1 for 2nd compare (to check if "equals")
     static final int BINARY_SEARCH_ITERATIONS = (int)(Math.log(LINE_STORAGE_SIZE)/Math.log(2)) + 2;
     final int AMOUNT_TO_RETURN = 10;
 
-    private static StringStorage setupStringStorage(final LineStorage lineStorage) throws InterruptedException {
-
+    private static LineStorageFactory setupLineStorageFactoryMock(final LineStorage lineStorage) throws InterruptedException {
         Mockito.when(lineStorage.numberOfLines()).thenReturn(LINE_STORAGE_SIZE);
 
         Mockito.doAnswer(invocationOnMock -> {
@@ -40,25 +34,11 @@ public class StringStorageTest extends SdHw1Test {
         IntStream.range(0, LINE_STORAGE_SIZE)
                 .forEach(i -> sortedMap.put("" + i, ""));
 
-        LineStorageFactory lineStorageFactory = s -> lineStorage;
+        return s -> lineStorage;
+    }
 
-        Injector injector = Guice.createInjector(new AbstractModule() {
-            @Override
-            protected void configure() {
-                bind(LineStorageFactory.class).toInstance(lineStorageFactory);
-            }
-
-            @Provides
-            String provideFileName() {
-                return "asdf";
-            }
-
-            @Provides
-            SortedMap<String,String> provideSortedMap() {
-                return sortedMap;
-            }
-        });
-        return injector.getInstance(StringStorage.class);
+    private static StringStorage setupStringStorage(final LineStorage lineStorage) throws InterruptedException {
+        return new StringStorage(setupLineStorageFactoryMock(lineStorage), "");
     }
 
     private void existTest(String id0, String id1, boolean exists) throws InterruptedException {
@@ -119,11 +99,14 @@ public class StringStorageTest extends SdHw1Test {
     }
 
     @Test
-    public void shouldAppendRightAmountOfLines() throws InterruptedException {
+    public void shouldAppendRightAmountOfLines() throws Exception {
         LineStorage lineStorage = Mockito.mock(LineStorage.class);
-        StringStorage stringStorage = setupStringStorage(lineStorage);
+        StringStorage stringStorage = new StringStorage(
+                setupLineStorageFactoryMock(lineStorage),
+                "", getFilesContent("./xmlParserTest/large.xml"), "/Root/Reviewer/Review", false
+        );
 
-        Mockito.verify(lineStorage, Mockito.times(LINE_STORAGE_SIZE)).appendLine(Mockito.anyString());
+        Mockito.verify(lineStorage, Mockito.times(3)).appendLine(Mockito.anyString());
     }
 
     @Test

@@ -1,0 +1,14 @@
+<Root>
+    <Reviewer Id="1">
+        <Review>
+            <Id>A</Id>
+            <Score>0</Score>
+        </Review>
+    </Reviewer>
+    <Reviewer Id="1">
+        <Review>
+            <Id>B</Id>
+            <Score>1</Score>
+        </Review>
+    </Reviewer>
+</Root>

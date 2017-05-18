@@ -53,7 +53,7 @@ public class XMLParser {
                     } else {
                         keys = String.join(DELIMITER, primaryId, secondaryId);
                     }
-                    sortedByTwoKeys.put(keys , String.join(DELIMITER, keys, value));
+                    sortedByTwoKeys.put(keys , value);
                 }
             }
         } catch (Exception e) {

@@ -4,6 +4,10 @@ import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.Timeout;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 
 public class SdHw1Test {
 
@@ -12,5 +16,9 @@ public class SdHw1Test {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    public static String getFilesContent(String fileName) throws FileNotFoundException {
+        return new Scanner(new File(XMLParserTest.class.getResource(fileName).getFile())).useDelimiter("\\Z").next();
+    }
 
 }

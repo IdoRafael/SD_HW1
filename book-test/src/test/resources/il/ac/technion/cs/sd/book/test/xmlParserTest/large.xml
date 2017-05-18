@@ -1,0 +1,40 @@
+<Root>
+    <Reviewer Id="1">
+        <Review>
+            <Id>A</Id>
+            <Score>0</Score>
+        </Review>
+        <Review>
+            <Id>A</Id>
+            <Score>1</Score>
+        </Review>
+    </Reviewer>
+    <Reviewer Id="1">
+        <Review>
+            <Id>A</Id>
+            <Score>2</Score>
+        </Review>
+        <Review>
+            <Id>A</Id>
+            <Score>3</Score>
+        </Review>
+    </Reviewer>
+    <Reviewer Id="1">
+        <Review>
+            <Id>B</Id>
+            <Score>10</Score>
+        </Review>
+        <Review>
+            <Id>A</Id>
+            <Score>4</Score>
+        </Review>
+    </Reviewer>
+    <Reviewer Id="8">
+    </Reviewer>
+    <Reviewer Id="0">
+        <Review>
+            <Id>A</Id>
+            <Score>5</Score>
+        </Review>
+    </Reviewer>
+</Root>

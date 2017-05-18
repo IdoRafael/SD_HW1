@@ -8,18 +8,46 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.SortedMap;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 
 public class XMLParserTest extends SdHw1Test{
 
-  private static String getXMLStringFromFile(String fileName) throws FileNotFoundException {
-    return new Scanner(new File(XMLParserTest.class.getResource(fileName).getFile())).useDelimiter("\\Z").next();
-  }
+    private static SortedMap getSortedMapFromXML(String fileName) throws FileNotFoundException {
+        String xml = getFilesContent("./xmlParserTest/" + fileName);
+        return XMLParser.parseXMLToSortedMap(xml, "/Root/Reviewer/Review",false);
+    }
 
-  @Test
-  public void testSimple2() throws Exception {
-    System.out.println("XPATH says:");
-    String xml = getXMLStringFromFile("xmlParserTest.xml");
-    SortedMap sortedMaps = XMLParser.parseXMLToSortedMap(xml, "/Root/Reviewer/Review",true);
-    System.out.println(sortedMaps);
-  }
+    @Test
+    public void shouldIgnoreDuplicatesAndGetLast() throws Exception {
+        SortedMap sortedMap = getSortedMapFromXML("duplicates.xml");
+
+        String reviewerAndBookId = String.join(",","1", "A");
+        String score = "3";
+
+        assertEquals(
+                score,
+                sortedMap.get(reviewerAndBookId)
+        );
+        assertEquals(1, sortedMap.size());
+    }
+
+    @Test
+    public void shouldIgnoreEmptyReviewers() throws Exception {
+
+    }
+
+    @Test
+    public void shouldSwapKeys() throws Exception {
+
+    }
+
+    @Test
+    public void shouldSort() throws Exception {
+
+    }
+
+
 }
