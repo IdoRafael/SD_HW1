@@ -10,13 +10,12 @@ public class BookScoreReaderImpl implements BookScoreReader {
     Storage reviewersStorage;
     Storage bookStorage;
 
-    private static final int REVIEWER_INDEX = 0;
-    private static final int BOOK_INDEX = 1;
+    private static final int SECONDARY_INDEX = 1;
     private static final int SCORE_INDEX = 2;
 
     private static final String DELIMITER = ",";
 
-    public BookScoreReaderImpl(){
+    public BookScoreReaderImpl() {
 
     }
 
@@ -37,55 +36,67 @@ public class BookScoreReaderImpl implements BookScoreReader {
 
     @Override
     public List<String> getReviewedBooks(String reviewerId) {
-        return reviewersStorage.getAllStringsById(reviewerId)
-                .stream()
-                .map(s -> s.split(DELIMITER)[BOOK_INDEX])
-                .collect(Collectors.toList());
+        return getAllSecondaryForPrimaryId(reviewerId, reviewersStorage);
     }
 
     @Override
     public Map<String, Integer> getAllReviewsByReviewer(String reviewerId) {
-        Map<String, Integer> reviewsByReviewer = new HashMap<>();
-        reviewersStorage.getAllStringsById(reviewerId)
-                .stream()
-                .forEach(s -> {
-                    String[] splitLineReview = s.split(DELIMITER);
-                    reviewsByReviewer.put(
-                            splitLineReview[BOOK_INDEX],
-                            Integer.valueOf(splitLineReview[SCORE_INDEX])
-                    );
-                });
-        return reviewsByReviewer;
+        return getAllSecondaryAndScoresForPrimary(reviewerId, reviewersStorage);
     }
 
     @Override
     public OptionalDouble getScoreAverageForReviewer(String reviewerId) {
-        List<String> reviewsByReviewer = reviewersStorage.getAllStringsById(reviewerId);
-
-        if (!reviewsByReviewer.isEmpty()) {
-            double sumOfReviewScores = reviewsByReviewer
-                    .stream()
-                    .mapToInt(s -> Integer.valueOf(s.split(DELIMITER)[SCORE_INDEX]))
-                    .sum();
-
-            return OptionalDouble.of(sumOfReviewScores / reviewsByReviewer.size());
-        } else {
-            return OptionalDouble.empty();
-        }
+        return getAverageScoreForPrimaryId(reviewerId, reviewersStorage);
     }
 
     @Override
     public List<String> getReviewers(String bookId) {
-        return null;
+        return getAllSecondaryForPrimaryId(bookId, bookStorage);
     }
 
     @Override
     public Map<String, Integer> getReviewsForBook(String bookId) {
-        return null;
+        return getAllSecondaryAndScoresForPrimary(bookId, bookStorage);
     }
 
     @Override
     public OptionalDouble getAverageReviewScoreForBook(String bookId) {
-        return null;
+        return getAverageScoreForPrimaryId(bookId, bookStorage);
+    }
+
+    private List<String> getAllSecondaryForPrimaryId(String primaryId, Storage storage) {
+        return storage.getAllStringsById(primaryId)
+                .stream()
+                .map(s -> s.split(DELIMITER)[SECONDARY_INDEX])
+                .collect(Collectors.toList());
+    }
+
+    private Map<String, Integer> getAllSecondaryAndScoresForPrimary(String primaryId, Storage storage) {
+        Map<String, Integer> reviewsForPrimaryId = new HashMap<>();
+        storage.getAllStringsById(primaryId)
+                .stream()
+                .forEach(s -> {
+                    String[] splitLineReview = s.split(DELIMITER);
+                    reviewsForPrimaryId.put(
+                            splitLineReview[SECONDARY_INDEX],
+                            Integer.valueOf(splitLineReview[SCORE_INDEX])
+                    );
+                });
+        return reviewsForPrimaryId;
+    }
+
+    private OptionalDouble getAverageScoreForPrimaryId(String primaryId, Storage storage) {
+        List<String> reviewsByPrimary = storage.getAllStringsById(primaryId);
+
+        if (!reviewsByPrimary.isEmpty()) {
+            double sumOfReviewScores = reviewsByPrimary
+                    .stream()
+                    .mapToInt(s -> Integer.valueOf(s.split(DELIMITER)[SCORE_INDEX]))
+                    .sum();
+
+            return OptionalDouble.of(sumOfReviewScores / reviewsByPrimary.size());
+        } else {
+            return OptionalDouble.empty();
+        }
     }
 }
