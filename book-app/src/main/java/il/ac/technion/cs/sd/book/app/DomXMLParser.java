@@ -14,6 +14,8 @@ import java.util.TreeMap;
 
 public class DomXMLParser {
 
+    private static final String DELIMITER = ",";
+
     public static SortedMap<String,Review>[] parseXMLToSortedMap(String xml) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = null;
@@ -33,8 +35,8 @@ public class DomXMLParser {
         NodeList reviewerList = document.getDocumentElement().getChildNodes();
 
         Comparator<String> csvStringComparator = Comparator
-                .comparing((String s) -> s.split(",")[0])
-                .thenComparing((String s)-> s.split(",")[1]);
+                .comparing((String s) -> s.split(DELIMITER)[0])
+                .thenComparing((String s)-> s.split(DELIMITER)[1]);
 
         SortedMap<String, String> sortedReviewMapByReviewer = new TreeMap<>(csvStringComparator);
         SortedMap<String, String> sortedReviewMapByBook = new TreeMap<>(csvStringComparator);
@@ -53,11 +55,11 @@ public class DomXMLParser {
                         Review newReview = new Review(reviewerId, bookId, bookScore);
 
                         sortedReviewMapByReviewer.put(
-                                String.join(",", reviewerId, bookId),
+                                String.join(DELIMITER, reviewerId, bookId),
                                 newReview.toStringFromReviewerFirst()
                         );
                         sortedReviewMapByBook.put(
-                                String.join(",", bookId, reviewerId),
+                                String.join(DELIMITER, bookId, reviewerId),
                                 newReview.toStringFromBookFirst()
                         );
                     }

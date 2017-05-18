@@ -13,6 +13,9 @@ public class StringStorage extends AbstractList<String> implements RandomAccess,
     private boolean sizeIsValid = false;
     private int size = 0;
 
+    private static final String DELIMITER = ",";
+
+
     @Inject
     public StringStorage(String fileName, LineStorageFactory lineStorageFactory, SortedMap<String,String> sortedMap) {
         this.lineStorage = lineStorageFactory.open(fileName);
@@ -66,7 +69,7 @@ public class StringStorage extends AbstractList<String> implements RandomAccess,
         if (keyFound >= 0) {
             for (int i = keyFound ; i >=0 ; --i) {
                 String toAdd = get(i);
-                if (toAdd.split(",")[0].equals(id)) {
+                if (toAdd.split(DELIMITER)[0].equals(id)) {
                     sortedBySecondaryId.addFirst(toAdd);
                 } else {
                     break;
@@ -74,7 +77,7 @@ public class StringStorage extends AbstractList<String> implements RandomAccess,
             }
             for (int i = keyFound + 1 ; i < size() ; ++i) {
                 String toAdd = get(i);
-                if (toAdd.split(",")[0].equals(id)) {
+                if (toAdd.split(DELIMITER)[0].equals(id)) {
                     sortedBySecondaryId.addLast(toAdd);
                 } else {
                     break;
@@ -88,16 +91,16 @@ public class StringStorage extends AbstractList<String> implements RandomAccess,
 
     private int findIndexByTwoKeys(String key0, String key1) {
         return findIndexByComparator(
-                String.join(",", key0, key1),
-                Comparator.comparing((String s) -> s.split(",")[0])
-                        .thenComparing((String s)-> s.split(",")[1])
+                String.join(DELIMITER, key0, key1),
+                Comparator.comparing((String s) -> s.split(DELIMITER)[0])
+                        .thenComparing((String s)-> s.split(DELIMITER)[1])
         );
     }
 
     private int findIndexBySingleKey(String key) {
         return findIndexByComparator(
                 key,
-                Comparator.comparing((String s) -> s.split(",")[0])
+                Comparator.comparing((String s) -> s.split(DELIMITER)[0])
         );
 
     }

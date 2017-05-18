@@ -18,11 +18,13 @@ import java.util.TreeMap;
 
 public class XPathXMLParser {
 
+    private static final String DELIMITER = ",";
+
     public static SortedMap<String,String>[] parseXMLToSortedMap(String xml) throws Exception {
 
         Comparator<String> csvStringComparator = Comparator
-                .comparing((String s) -> s.split(",")[0])
-                .thenComparing((String s)-> s.split(",")[1]);
+                .comparing((String s) -> s.split(DELIMITER)[0])
+                .thenComparing((String s)-> s.split(DELIMITER)[1]);
 
         SortedMap<String, String> sortedReviewMapByReviewer = new TreeMap<>(csvStringComparator);
         SortedMap<String, String> sortedReviewMapByBook = new TreeMap<>(csvStringComparator);
@@ -49,16 +51,15 @@ public class XPathXMLParser {
                     Review newReview = new Review(reviewerId, bookId, bookScore);
 
                     sortedReviewMapByReviewer.put(
-                            String.join(",", reviewerId, bookId),
+                            String.join(DELIMITER, reviewerId, bookId),
                             newReview.toStringFromReviewerFirst()
                     );
                     sortedReviewMapByBook.put(
-                            String.join(",", bookId, reviewerId),
+                            String.join(DELIMITER, bookId, reviewerId),
                             newReview.toStringFromBookFirst()
                     );
                 }
-        }
-
+            }
         } catch (Exception e) {
             throw new Exception("OMGS LOL WTF IS THIS EXCEPTION TROLOLOL");
         }

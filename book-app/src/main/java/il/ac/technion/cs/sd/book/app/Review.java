@@ -5,6 +5,8 @@ public class Review {
     private final String bookId;
     private final String bookScore;
 
+    private static final String DELIMITER = ",";
+
     public Review(String reviewerId, String bookId, String bookScore) {
         this.reviewerId = reviewerId;
         this.bookId = bookId;
@@ -17,11 +19,11 @@ public class Review {
     }
 
     public String toStringFromReviewerFirst() {
-        return String.join(",", reviewerId, bookId, bookScore);
+        return String.join(DELIMITER, reviewerId, bookId, bookScore);
     }
 
     public String toStringFromBookFirst() {
-        return String.join(",", bookId, reviewerId, bookScore);
+        return String.join(DELIMITER, bookId, reviewerId, bookScore);
     }
 }
 
