@@ -1,8 +1,12 @@
 package il.ac.technion.cs.sd.book.app;
 
 
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import il.ac.technion.cs.sd.book.library.Storage;
+import il.ac.technion.cs.sd.book.library.StorageFactory;
 
+import javax.inject.Named;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,8 +19,13 @@ public class BookScoreReaderImpl implements BookScoreReader {
 
     private static final String DELIMITER = ",";
 
-    public BookScoreReaderImpl() {
-
+    @Inject
+    public BookScoreReaderImpl(
+            StorageFactory storageFactory,
+            @Named("reviewersFileName") String reviewersFileName,
+            @Named("booksFileName") String booksFileName) {
+        this.reviewersStorage = storageFactory.create(reviewersFileName);
+        this.bookStorage = storageFactory.create(booksFileName);
     }
 
     @Override

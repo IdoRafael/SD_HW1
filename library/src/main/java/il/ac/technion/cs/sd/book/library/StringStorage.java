@@ -1,10 +1,10 @@
 package il.ac.technion.cs.sd.book.library;
 
+import com.google.inject.assistedinject.Assisted;
 import il.ac.technion.cs.sd.book.ext.LineStorage;
 import il.ac.technion.cs.sd.book.ext.LineStorageFactory;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.*;
 
 
@@ -15,10 +15,22 @@ public class StringStorage extends AbstractList<String> implements RandomAccess,
 
     private static final String DELIMITER = ",";
 
+    @Inject
+    public StringStorage(
+            LineStorageFactory lineStorageFactory,
+            @Assisted String fileName
+    ) {
+        this.lineStorage = lineStorageFactory.open(fileName);
+        sizeIsValid = false;
+    }
 
     @Inject
-    public StringStorage(String fileName, LineStorageFactory lineStorageFactory, SortedMap<String,String> sortedMap) {
-        this.lineStorage = lineStorageFactory.open(fileName);
+    public StringStorage(
+             LineStorageFactory lineStorageFactory,
+             @Assisted String fileName,
+             @Assisted SortedMap<String, String> sortedMap
+    ) {
+        this(lineStorageFactory, fileName);
         sortedMap.forEach((k, v) -> lineStorage.appendLine(v));
         sizeIsValid = false;
     }
