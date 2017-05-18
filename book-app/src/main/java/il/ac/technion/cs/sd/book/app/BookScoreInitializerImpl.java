@@ -1,20 +1,13 @@
 package il.ac.technion.cs.sd.book.app;
 
 import com.google.inject.*;
-import il.ac.technion.cs.sd.book.ext.LineStorageFactory;
 import il.ac.technion.cs.sd.book.library.StorageFactory;
-import il.ac.technion.cs.sd.book.library.StringStorage;
 
 import javax.inject.Named;
-import java.util.SortedMap;
 
 public class BookScoreInitializerImpl implements BookScoreInitializer {
 
     private StorageFactory storageFactory;
-
-    private static final Integer REVIEWERS_FIRST_INDEX = 0;
-    private static final Integer BOOKS_FIRST_INDEX = 1;
-
     private String reviewersFileName;
     private String booksFileName;
 
@@ -31,14 +24,8 @@ public class BookScoreInitializerImpl implements BookScoreInitializer {
 
     @Override
     public void setup(String xmlData) {
-        SortedMap<String, String>[] sortedMap;
-        try {
-            sortedMap = XPathXMLParser.parseXMLToSortedMap(xmlData);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        storageFactory.create(reviewersFileName, sortedMap[REVIEWERS_FIRST_INDEX]);
-        storageFactory.create(booksFileName, sortedMap[BOOKS_FIRST_INDEX]);
+        String query = "/Root/Reviewer/Review";
+        storageFactory.create(reviewersFileName, xmlData, query, false);
+        storageFactory.create(booksFileName, xmlData, query, true);
     }
 }

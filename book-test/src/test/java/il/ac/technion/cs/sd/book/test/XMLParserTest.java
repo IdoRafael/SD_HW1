@@ -1,7 +1,6 @@
 package il.ac.technion.cs.sd.book.test;
 
-import il.ac.technion.cs.sd.book.app.DomXMLParser;
-import il.ac.technion.cs.sd.book.app.XPathXMLParser;
+import il.ac.technion.cs.sd.book.library.XMLParser;
 import org.junit.Test;
 
 import java.io.File;
@@ -17,20 +16,10 @@ public class XMLParserTest extends SdHw1Test{
   }
 
   @Test
-  public void testSimple() throws Exception {
-    System.out.println("DOMParser says:");
-    String xml = getXMLStringFromFile("xmlParserTest.xml");
-    SortedMap[] sortedMaps = DomXMLParser.parseXMLToSortedMap(xml);
-    System.out.println(sortedMaps[0]);
-    System.out.println(sortedMaps[1]);
-  }
-
-  @Test
   public void testSimple2() throws Exception {
     System.out.println("XPATH says:");
     String xml = getXMLStringFromFile("xmlParserTest.xml");
-    SortedMap[] sortedMaps = XPathXMLParser.parseXMLToSortedMap(xml);
-    System.out.println(sortedMaps[0]);
-    System.out.println(sortedMaps[1]);
+    SortedMap sortedMaps = XMLParser.parseXMLToSortedMap(xml, "/Root/Reviewer/Review",true);
+    System.out.println(sortedMaps);
   }
 }

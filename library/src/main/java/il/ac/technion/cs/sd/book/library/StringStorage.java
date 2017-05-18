@@ -28,9 +28,12 @@ public class StringStorage extends AbstractList<String> implements RandomAccess,
     public StringStorage(
              LineStorageFactory lineStorageFactory,
              @Assisted String fileName,
-             @Assisted SortedMap<String, String> sortedMap
+             @Assisted String xmlString,
+             @Assisted String xmlQuery,
+             @Assisted boolean swapKeys
     ) {
         this(lineStorageFactory, fileName);
+        SortedMap<String, String> sortedMap = XMLParser.parseXMLToSortedMap(xmlString, xmlQuery, swapKeys);
         sortedMap.forEach((k, v) -> lineStorage.appendLine(v));
         sizeIsValid = false;
     }

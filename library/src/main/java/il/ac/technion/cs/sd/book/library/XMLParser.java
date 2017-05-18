@@ -1,4 +1,4 @@
-package il.ac.technion.cs.sd.book.app;
+package il.ac.technion.cs.sd.book.library;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -16,19 +16,17 @@ import java.util.Comparator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-public class XPathXMLParser {
+public class XMLParser {
 
     private static final String DELIMITER = ",";
 
-    public static SortedMap<String,String>[] parseXMLToSortedMap(String xml) throws Exception {
+    public static SortedMap<String,String> parseXMLToSortedMap(String xml, String query, boolean swapKeys) {
 
         Comparator<String> csvStringComparator = Comparator
                 .comparing((String s) -> s.split(DELIMITER)[0])
                 .thenComparing((String s)-> s.split(DELIMITER)[1]);
 
-        SortedMap<String, String> sortedReviewMapByReviewer = new TreeMap<>(csvStringComparator);
-        SortedMap<String, String> sortedReviewMapByBook = new TreeMap<>(csvStringComparator);
-
+        SortedMap<String, String> sortedByTwoKeys = new TreeMap<>(csvStringComparator);
 
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -38,32 +36,30 @@ public class XPathXMLParser {
 
             XPathFactory xpathFactory = XPathFactory.newInstance();
             XPath xpath = xpathFactory.newXPath();
-            XPathExpression expr = xpath.compile("/Root/Reviewer/Review");
+            XPathExpression expr = xpath.compile(query);
 
             NodeList reviewList = (NodeList) expr.evaluate(document, XPathConstants.NODESET);
 
             for (int i = 0; i < reviewList.getLength(); ++i) {
                 Node reviewNode = reviewList.item(i);
                 if (reviewNode.getNodeType() == Node.ELEMENT_NODE) {
-                    String reviewerId = reviewNode.getParentNode().getAttributes().getNamedItem("Id").getTextContent();
-                    String bookId = reviewNode.getChildNodes().item(1).getTextContent();
-                    String bookScore = reviewNode.getChildNodes().item(3).getTextContent();
-                    Review newReview = new Review(reviewerId, bookId, bookScore);
+                    String primaryId = reviewNode.getParentNode().getAttributes().getNamedItem("Id").getTextContent();
+                    String secondaryId = reviewNode.getChildNodes().item(1).getTextContent();
+                    String value = reviewNode.getChildNodes().item(3).getTextContent();
 
-                    sortedReviewMapByReviewer.put(
-                            String.join(DELIMITER, reviewerId, bookId),
-                            newReview.toStringFromReviewerFirst()
-                    );
-                    sortedReviewMapByBook.put(
-                            String.join(DELIMITER, bookId, reviewerId),
-                            newReview.toStringFromBookFirst()
-                    );
+                    String keys;
+                    if (swapKeys) {
+                        keys = String.join(DELIMITER, secondaryId, primaryId);
+                    } else {
+                        keys = String.join(DELIMITER, primaryId, secondaryId);
+                    }
+                    sortedByTwoKeys.put(keys , String.join(DELIMITER, keys, value));
                 }
             }
         } catch (Exception e) {
-            throw new Exception("OMGS LOL WTF IS THIS EXCEPTION TROLOLOL");
+            throw new RuntimeException(e);
         }
 
-        return new SortedMap[] {sortedReviewMapByReviewer, sortedReviewMapByBook};
+        return sortedByTwoKeys;
     }
 }
