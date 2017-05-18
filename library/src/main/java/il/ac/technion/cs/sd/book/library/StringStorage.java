@@ -1,6 +1,7 @@
 package il.ac.technion.cs.sd.book.library;
 
 import com.google.inject.assistedinject.Assisted;
+import com.google.inject.assistedinject.AssistedInject;
 import il.ac.technion.cs.sd.book.ext.LineStorage;
 import il.ac.technion.cs.sd.book.ext.LineStorageFactory;
 
@@ -15,7 +16,7 @@ public class StringStorage extends AbstractList<String> implements RandomAccess,
 
     private static final String DELIMITER = ",";
 
-    @Inject
+    @AssistedInject
     public StringStorage(
             LineStorageFactory lineStorageFactory,
             @Assisted String fileName
@@ -24,13 +25,13 @@ public class StringStorage extends AbstractList<String> implements RandomAccess,
         sizeIsValid = false;
     }
 
-    @Inject
+    @AssistedInject
     public StringStorage(
              LineStorageFactory lineStorageFactory,
-             @Assisted String fileName,
-             @Assisted String xmlString,
-             @Assisted String xmlQuery,
-             @Assisted boolean swapKeys
+             @Assisted("fileName") String fileName,
+             @Assisted("xmlString") String xmlString,
+             @Assisted("xmlQuery") String xmlQuery,
+             @Assisted("swapKeys") boolean swapKeys
     ) {
         this(lineStorageFactory, fileName);
         SortedMap<String, String> sortedMap = XMLParser.parseXMLToSortedMap(xmlString, xmlQuery, swapKeys);
