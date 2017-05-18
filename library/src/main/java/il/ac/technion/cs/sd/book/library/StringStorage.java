@@ -4,6 +4,7 @@ import il.ac.technion.cs.sd.book.ext.LineStorage;
 import il.ac.technion.cs.sd.book.ext.LineStorageFactory;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.*;
 
 
@@ -13,7 +14,7 @@ public class StringStorage extends AbstractList<String> implements RandomAccess,
     private int size = 0;
 
     @Inject
-    public StringStorage(String fileName, SortedMap<String,String> sortedMap,LineStorageFactory lineStorageFactory) {
+    public StringStorage(String fileName, LineStorageFactory lineStorageFactory, SortedMap<String,String> sortedMap) {
         this.lineStorage = lineStorageFactory.open(fileName);
         sortedMap.forEach((k, v) -> lineStorage.appendLine(v));
         sizeIsValid = false;

@@ -1,10 +1,8 @@
 package il.ac.technion.cs.sd.book.test;
 
-import il.ac.technion.cs.sd.book.app.XMLParser;
-import il.ac.technion.cs.sd.book.app.XMLParser2;
-import org.junit.Rule;
+import il.ac.technion.cs.sd.book.app.DomXMLParser;
+import il.ac.technion.cs.sd.book.app.XPathXMLParser;
 import org.junit.Test;
-import org.junit.rules.Timeout;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,7 +20,7 @@ public class XMLParserTest extends SdHw1Test{
   public void testSimple() throws Exception {
     System.out.println("DOMParser says:");
     String xml = getXMLStringFromFile("xmlParserTest.xml");
-    SortedMap[] sortedMaps = XMLParser.parseXMLToSortedMap(xml);
+    SortedMap[] sortedMaps = DomXMLParser.parseXMLToSortedMap(xml);
     System.out.println(sortedMaps[0]);
     System.out.println(sortedMaps[1]);
   }
@@ -31,7 +29,7 @@ public class XMLParserTest extends SdHw1Test{
   public void testSimple2() throws Exception {
     System.out.println("XPATH says:");
     String xml = getXMLStringFromFile("xmlParserTest.xml");
-    SortedMap[] sortedMaps = XMLParser2.parseXMLToSortedMap(xml);
+    SortedMap[] sortedMaps = XPathXMLParser.parseXMLToSortedMap(xml);
     System.out.println(sortedMaps[0]);
     System.out.println(sortedMaps[1]);
   }

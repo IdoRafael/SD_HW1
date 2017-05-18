@@ -16,7 +16,7 @@ import java.util.Comparator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-public class XMLParser2 {
+public class XPathXMLParser {
 
     public static SortedMap<String,String>[] parseXMLToSortedMap(String xml) throws Exception {
 
